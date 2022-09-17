@@ -1,19 +1,26 @@
 const express = require ("express");
 const mongoose = require ("mongoose")
-const cors = require ("cors")
+const dotenv = require ("dotenv")
+const cors = require ("cors");
+const routesUrls = require ("./routes/routes");
 
 
 const app = express()
 
-app.use(express.json()) //using express to comunicate with mongodb
+//Basic connection to MongoDb
+//Configure env file to connect to db safely
+dotenv.config()
+
+mongoose.connect(process.env.DATA_ACCESS, () => console.log("Database Connected")) 
+
+//base route for routes folder 
+app.use(express.json())
+app.use("/app", routesUrls)
+
+
+// allows you to communicate with front end
 app.use(cors()) 
 
-//Basic connection to MongoDB
-mongoose.connect(
-    "mongodb+srv://user1:bacon123@cluster0.6ypzfec.mongodb.net/enigma2?retryWrites=true&w=majority",
-{
-    useNewUrlParser: true,
-})
 
 //shows Active listening port
 app.listen(3001, () => {
